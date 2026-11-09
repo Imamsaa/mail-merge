@@ -113,6 +113,36 @@
       .steps, .tips { grid-template-columns: 1fr; }
       .mapping-card { padding: 18px; }
     }
+
+    .submission-card { margin-top: 28px; padding: 26px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); }
+    .submission-intro { margin: 8px 0 20px; max-width: 700px; color: var(--muted); font-size: 13px; }
+    .submission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { color: var(--navy); font-size: 13px; font-weight: 800; }
+    .field input:not([type="file"]) { width: 100%; min-height: 46px; padding: 11px 13px; border: 1px solid #d9e2ee; border-radius: 11px; background: #fbfcfe; color: var(--ink); font: inherit; font-size: 14px; outline: none; }
+    .field input:focus { border-color: #7da5f8; box-shadow: 0 0 0 3px rgba(37,99,235,.10); }
+    .upload-box { display: block; padding: 20px; border: 1.5px dashed #b8c8df; border-radius: 15px; background: #f8faff; text-align: center; cursor: pointer; transition: .18s ease; }
+    .upload-box:hover, .upload-box:focus-within { border-color: var(--blue); background: #f1f6ff; }
+    .upload-icon { display: block; margin-bottom: 7px; color: var(--blue); font-size: 25px; }
+    .upload-box strong { display: block; color: var(--navy); font-size: 13px; }
+    .upload-box small { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
+    .upload-box input { display: block; max-width: 100%; margin: 12px auto 0; color: var(--muted); font: inherit; font-size: 12px; }
+    .file-selected { margin: 8px 0 0; color: var(--mint-ink); font-size: 12px; font-weight: 750; overflow-wrap: anywhere; }
+    .submit-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 18px; }
+    .submit-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 47px; padding: 0 21px; border: 0; border-radius: 12px; background: var(--blue); color: #fff; font: inherit; font-size: 13px; font-weight: 850; cursor: pointer; transition: .18s ease; }
+    .submit-button:hover:not(:disabled) { background: var(--blue-dark); transform: translateY(-1px); }
+    .submit-button:disabled { cursor: not-allowed; opacity: .55; }
+    .submit-note { color: var(--muted); font-size: 11px; }
+    .submission-status { display: none; margin-top: 16px; padding: 13px 15px; border: 1px solid transparent; border-radius: 12px; font-size: 13px; }
+    .submission-status.show { display: block; }
+    .submission-status.info { color: #24508d; border-color: #cfe0ff; background: #eff5ff; }
+    .submission-status.success { color: #176344; border-color: #bee8d3; background: #effbf5; }
+    .submission-status.error { color: #9b2c2c; border-color: #f3caca; background: #fff4f4; }
+    .config-warning { margin-top: 14px; padding: 11px 13px; border-radius: 11px; color: #805a16; background: #fff8e8; border: 1px solid #f2e1b7; font-size: 12px; }
+    .honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+    @media (max-width: 720px) { .submission-card { padding: 19px; } .submission-grid { grid-template-columns: 1fr; } .field.full { grid-column: auto; } .submit-button { width: 100%; } .submit-row { align-items: stretch; } }
+
   </style>
 </head>
 <body>
@@ -225,11 +255,52 @@
       </div>
     </section>
 
+
+    <section class="submission-card" id="pengumpulan" aria-labelledby="submission-title">
+      <p class="section-kicker">Pengumpulan tugas</p>
+      <h2 id="submission-title">Kirim hasil pekerjaan</h2>
+      <p class="submission-intro">Setelah 10 surat selesai dibuat dan diperiksa, isi identitas di bawah lalu unggah satu file hasil akhir dalam format PDF atau Word.</p>
+      <form id="submissionForm" novalidate>
+        <div class="submission-grid">
+          <div class="field">
+            <label for="studentName">Nama lengkap siswa</label>
+            <input id="studentName" name="studentName" type="text" maxlength="100" placeholder="Masukkan nama lengkap" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="studentClass">Kelas</label>
+            <input id="studentClass" name="studentClass" type="text" maxlength="30" placeholder="Contoh: 8A" required>
+          </div>
+          <div class="field full">
+            <label for="taskFile">File hasil Mail Merge</label>
+            <label class="upload-box" for="taskFile">
+              <span class="upload-icon" aria-hidden="true">↑</span>
+              <strong>Pilih file tugas dari perangkat</strong>
+              <small>Format PDF, DOC, atau DOCX · Maksimal 10 MB</small>
+              <input id="taskFile" name="taskFile" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
+            </label>
+            <p class="file-selected" id="selectedFileName" aria-live="polite">Belum ada file dipilih.</p>
+          </div>
+          <div class="field honeypot" aria-hidden="true">
+            <label for="website">Website</label>
+            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+        </div>
+        <div class="submit-row">
+          <button class="submit-button" id="submitButton" type="submit"><span aria-hidden="true">↗</span> Kirim Tugas</button>
+          <span class="submit-note">Pastikan file yang diunggah adalah hasil akhir, bukan template kosong.</span>
+        </div>
+        <div class="submission-status" id="submissionStatus" role="status" aria-live="polite"></div>
+      </form>
+      <div class="config-warning" id="configWarning" hidden>Form pengumpulan belum diaktifkan. Guru perlu menyelesaikan konfigurasi Google Apps Script terlebih dahulu.</div>
+    </section>
+
     <section class="deliverable">
       <div class="deliverable-icon" aria-hidden="true">📄</div>
       <div><h2>Hasil yang harus diperoleh</h2><p>Satu dokumen gabungan yang berisi 10 surat resmi, masing-masing dengan data penerima yang berbeda. Periksa seluruh surat dan pastikan formatnya rapi sebelum dikumpulkan sesuai arahan guru.</p></div>
     </section>
   </main>
+  <script src="./submission-config.js"></script>
+  <script src="./submission.js" defer></script>
   <footer><div class="wrap">Tugas Praktik Informatika · Mail Merge Surat Resmi</div></footer>
 </body>
 </html>
