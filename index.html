@@ -259,39 +259,15 @@
     <section class="submission-card" id="pengumpulan" aria-labelledby="submission-title">
       <p class="section-kicker">Pengumpulan tugas</p>
       <h2 id="submission-title">Kirim hasil pekerjaan</h2>
-      <p class="submission-intro">Setelah 10 surat selesai dibuat dan diperiksa, isi identitas di bawah lalu unggah satu file hasil akhir dalam format PDF atau Word.</p>
-      <form id="submissionForm" novalidate>
-        <div class="submission-grid">
-          <div class="field">
-            <label for="studentName">Nama lengkap siswa</label>
-            <input id="studentName" name="studentName" type="text" maxlength="100" placeholder="Masukkan nama lengkap" autocomplete="name" required>
-          </div>
-          <div class="field">
-            <label for="studentClass">Kelas</label>
-            <input id="studentClass" name="studentClass" type="text" maxlength="30" placeholder="Contoh: 8A" required>
-          </div>
-          <div class="field full">
-            <label for="taskFile">File hasil Mail Merge</label>
-            <label class="upload-box" for="taskFile">
-              <span class="upload-icon" aria-hidden="true">↑</span>
-              <strong>Pilih file tugas dari perangkat</strong>
-              <small>Format PDF, DOC, atau DOCX · Maksimal 10 MB</small>
-              <input id="taskFile" name="taskFile" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
-            </label>
-            <p class="file-selected" id="selectedFileName" aria-live="polite">Belum ada file dipilih.</p>
-          </div>
-          <div class="field honeypot" aria-hidden="true">
-            <label for="website">Website</label>
-            <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
-          </div>
-        </div>
-        <div class="submit-row">
-          <button class="submit-button" id="submitButton" type="submit"><span aria-hidden="true">↗</span> Kirim Tugas</button>
-          <span class="submit-note">Pastikan file yang diunggah adalah hasil akhir, bukan template kosong.</span>
-        </div>
-        <div class="submission-status" id="submissionStatus" role="status" aria-live="polite"></div>
-      </form>
-      <div class="config-warning" id="configWarning" hidden>Form pengumpulan belum diaktifkan. Guru perlu menyelesaikan konfigurasi Google Apps Script terlebih dahulu.</div>
+      <p class="submission-intro">Setelah semua surat selesai dibuat dan diperiksa, buka form pengumpulan. Isi nama dan kelas, lalu pilih satu file hasil akhir dalam format PDF atau Word.</p>
+      <div class="submit-row">
+        <a class="submit-button" id="openSubmissionForm" href="#" target="_blank" rel="noopener" aria-disabled="true">
+          <span aria-hidden="true">↗</span> Buka Form Pengumpulan
+        </a>
+        <span class="submit-note">PDF, DOC, atau DOCX · Maksimal 10 MB</span>
+      </div>
+      <div class="submission-status info show" id="submissionInfo">Form terbuka di tab baru. Notifikasi berhasil atau gagal akan muncul langsung pada halaman form tersebut.</div>
+      <div class="config-warning" id="configWarning" hidden>Form belum diaktifkan. Guru perlu memasukkan URL deployment Apps Script ke submission-config.js.</div>
     </section>
 
     <section class="deliverable">
@@ -299,8 +275,8 @@
       <div><h2>Hasil yang harus diperoleh</h2><p>Satu dokumen gabungan yang berisi 10 surat resmi, masing-masing dengan data penerima yang berbeda. Periksa seluruh surat dan pastikan formatnya rapi sebelum dikumpulkan sesuai arahan guru.</p></div>
     </section>
   </main>
-  <script src="./submission-config.js"></script>
-  <script src="./submission.js" defer></script>
+  <script src="./submission-config.js?v=3"></script>
+  <script src="./submission.js?v=3" defer></script>
   <footer><div class="wrap">Tugas Praktik Informatika · Mail Merge Surat Resmi</div></footer>
 </body>
 </html>
