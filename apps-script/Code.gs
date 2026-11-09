@@ -1,7 +1,8 @@
 /**
- * Mail Merge — penerimaan tugas siswa.
- * Jalankan setup() satu kali, lalu deploy sebagai Web App.
+ * MAIL MERGE — penerimaan tugas siswa.
+ * Jalankan setup() satu kali sebelum deploy sebagai Web App.
  */
+
 const APP_CONFIG = {
   SPREADSHEET_NAME: "Rekap Pengumpulan Tugas Surat Resmi",
   FOLDER_NAME: "Pengumpulan Tugas Surat Resmi",
@@ -25,7 +26,9 @@ function setup() {
     ]);
     sheet.setFrozenRows(1);
     sheet.getRange(1, 1, 1, 8)
-      .setFontWeight("bold").setBackground("#172947").setFontColor("#ffffff");
+      .setFontWeight("bold")
+      .setBackground("#172947")
+      .setFontColor("#ffffff");
     sheet.autoResizeColumns(1, 8);
     spreadsheetId = spreadsheet.getId();
     properties.setProperty("SPREADSHEET_ID", spreadsheetId);
@@ -42,47 +45,62 @@ function setup() {
   Logger.log("Folder Drive: " + DriveApp.getFolderById(folderId).getUrl());
 }
 
-function doGet() {
+/**
+ * Halaman upload berada dalam domain Apps Script sehingga respons server
+ * dapat ditangani langsung oleh google.script.run.
+ */
+function doGet(e) {
+  const view = e && e.parameter ? e.parameter.view : "";
+  if (view === "form") {
+    return HtmlService.createHtmlOutputFromFile("SubmissionForm")
+      .setTitle("Pengumpulan Tugas Mail Merge");
+  }
+
   return HtmlService.createHtmlOutput(
-    "<h2>Mail Merge submission endpoint is ready.</h2><p>Gunakan form pengumpulan tugas pada halaman kelas.</p>"
+    "<h2>Form Pengumpulan Tugas Mail Merge</h2>" +
+    "<p>Buka halaman tugas, lalu klik tombol Buka Form Pengumpulan.</p>"
   );
 }
 
-function doPost(e) {
-  let requestId = "";
-  let uploadedFile = null;
+/**
+ * Form element harus menjadi satu-satunya argumen google.script.run.
+ * Apps Script mengubah input file menjadi Blob pada formObject.taskFile.
+ */
+function submitAssignment(formObject) {
+  let savedFile = null;
   let lock = null;
 
   try {
-    const rawPayload = e && e.parameter ? e.parameter.payload : "";
-    if (!rawPayload) throw new Error("Data pengumpulan tidak ditemukan.");
+    if (!formObject) throw new Error("Data form tidak ditemukan.");
+    if (String(formObject.website || "").trim()) {
+      throw new Error("Permintaan tidak valid.");
+    }
 
-    const data = JSON.parse(rawPayload);
-    requestId = String(data.requestId || Utilities.getUuid());
+    const studentName = String(formObject.studentName || "").trim();
+    const studentClass = String(formObject.studentClass || "").trim();
+    const fileBlob = formObject.taskFile;
 
-    if (String(data.website || "").trim()) throw new Error("Permintaan tidak valid.");
-
-    const studentName = String(data.studentName || "").trim();
-    const studentClass = String(data.studentClass || "").trim();
-    const originalName = String(data.fileName || "").trim();
-    const fileData = String(data.fileData || "");
-
-    if (!studentName || !studentClass || !originalName || !fileData) {
-      throw new Error("Nama, kelas, dan file tugas wajib diisi.");
+    if (!studentName || !studentClass) {
+      throw new Error("Nama dan kelas wajib diisi.");
     }
     if (studentName.length > 100 || studentClass.length > 30) {
       throw new Error("Nama atau kelas terlalu panjang.");
     }
+    if (!fileBlob || typeof fileBlob.getBytes !== "function") {
+      throw new Error("File tugas belum dipilih.");
+    }
 
-    const extensionMatch = originalName.toLowerCase().match(/\.([a-z0-9]+)$/);
-    const extension = extensionMatch ? extensionMatch[1] : "";
+    const originalName = String(fileBlob.getName() || "").trim();
+    const match = originalName.toLowerCase().match(/\.([a-z0-9]+)$/);
+    const extension = match ? match[1] : "";
     if (APP_CONFIG.ALLOWED_EXTENSIONS.indexOf(extension) === -1) {
       throw new Error("Format file harus PDF, DOC, atau DOCX.");
     }
 
-    const estimatedBytes = Math.floor(fileData.length * 3 / 4);
-    if (estimatedBytes <= 0 || estimatedBytes > APP_CONFIG.MAX_FILE_SIZE) {
-      throw new Error("Ukuran file kosong atau melebihi batas 10 MB.");
+    const bytes = fileBlob.getBytes();
+    if (!bytes || bytes.length === 0) throw new Error("File yang dipilih kosong.");
+    if (bytes.length > APP_CONFIG.MAX_FILE_SIZE) {
+      throw new Error("Ukuran file melebihi batas 10 MB.");
     }
 
     const mimeTypes = {
@@ -90,20 +108,6 @@ function doPost(e) {
       doc: "application/msword",
       docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     };
-    const bytes = Utilities.base64Decode(fileData);
-    if (bytes.length > APP_CONFIG.MAX_FILE_SIZE) {
-      throw new Error("Ukuran file melebihi batas 10 MB.");
-    }
-
-    const safeOriginalName = originalName
-      .replace(/[\\/:*?"<>|#%{}~&]/g, "_")
-      .replace(/\s+/g, "_")
-      .slice(-120);
-    const timeLabel = Utilities.formatDate(
-      new Date(), Session.getScriptTimeZone(), "yyyyMMdd_HHmmss"
-    );
-    const savedName = timeLabel + "_" + safeOriginalName;
-    const blob = Utilities.newBlob(bytes, mimeTypes[extension], savedName);
 
     const properties = PropertiesService.getScriptProperties();
     const folderId = properties.getProperty("FOLDER_ID");
@@ -112,11 +116,21 @@ function doPost(e) {
       throw new Error("Server belum disiapkan. Guru perlu menjalankan setup() di Apps Script.");
     }
 
+    const safeName = originalName
+      .replace(/[\\/:*?"<>|#%{}~&]/g, "_")
+      .replace(/\s+/g, "_")
+      .slice(-120);
+    const timeLabel = Utilities.formatDate(
+      new Date(), Session.getScriptTimeZone(), "yyyyMMdd_HHmmss"
+    );
+    const savedName = timeLabel + "_" + safeName;
+    const blob = Utilities.newBlob(bytes, mimeTypes[extension], savedName);
+
     lock = LockService.getScriptLock();
     lock.waitLock(30000);
 
-    uploadedFile = DriveApp.getFolderById(folderId).createFile(blob);
-    uploadedFile.setDescription(
+    savedFile = DriveApp.getFolderById(folderId).createFile(blob);
+    savedFile.setDescription(
       "Tugas Mail Merge Surat Resmi dari " + studentName + " (" + studentClass + ")"
     );
 
@@ -124,49 +138,27 @@ function doPost(e) {
     const sheet = spreadsheet.getSheetByName(APP_CONFIG.SHEET_NAME);
     if (!sheet) throw new Error("Sheet pengumpulan tidak ditemukan.");
 
+    const submissionId = Utilities.getUuid();
     sheet.appendRow([
       new Date(), studentName, studentClass, savedName,
-      bytes.length, mimeTypes[extension], uploadedFile.getUrl(), requestId
+      bytes.length, mimeTypes[extension], savedFile.getUrl(), submissionId
     ]);
 
-    return createResponse_({
-      source: "mail-merge-submission",
-      requestId: requestId,
+    return {
       ok: true,
-      message: "Tugas berhasil dikumpulkan. Terima kasih!"
-    });
+      message: "Tugas berhasil dikumpulkan. Terima kasih!",
+      fileName: savedName,
+      submissionId: submissionId
+    };
   } catch (error) {
-    if (uploadedFile) {
-      try { uploadedFile.setTrashed(true); } catch (ignored) {}
+    if (savedFile) {
+      try { savedFile.setTrashed(true); } catch (ignored) {}
     }
-    return createResponse_({
-      source: "mail-merge-submission",
-      requestId: requestId,
-      ok: false,
-      message: error && error.message ? error.message : "Terjadi kesalahan saat menyimpan tugas."
-    });
+    throw new Error(
+      error && error.message ? error.message :
+      "Terjadi kesalahan saat menyimpan tugas. Silakan coba lagi."
+    );
   } finally {
     if (lock && lock.hasLock()) lock.releaseLock();
   }
-}
-
-/**
- * Mengirim hasil ke halaman statis melalui iframe + postMessage.
- * Tidak memerlukan pembacaan respons fetch lintas-origin.
- */
-function createResponse_(result) {
-  const safeJson = JSON.stringify(result)
-    .replace(/</g, "\\u003c")
-    .replace(/>/g, "\\u003e")
-    .replace(/&/g, "\\u0026");
-
-  const output = [
-    "<!doctype html><html><head><meta charset='utf-8'></head><body>",
-    "<script>window.parent.postMessage(" + safeJson + ", '*');</script>",
-    "<p>Permintaan selesai. Silakan kembali ke halaman tugas.</p>",
-    "</body></html>"
-  ].join("");
-
-  return HtmlService.createHtmlOutput(output)
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
