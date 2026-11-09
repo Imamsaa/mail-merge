@@ -1,51 +1,32 @@
-# Integrasi Google Apps Script — Mail Merge
+# Google Apps Script — Mail Merge Submission
 
-Halaman statis memakai submission-config.js untuk mengirim file tugas. Apps Script menyimpan file di Google Drive dan menambahkan catatan pengumpulan ke Google Sheets.
+Upload sekarang memakai halaman mandiri Apps Script dengan `google.script.run`. Success/failure handler akan menampilkan hasil langsung di halaman form, tanpa `postMessage` atau iframe lintas-domain.
 
-## 1. Buat project Apps Script
+## File yang diperlukan
 
-1. Buka https://script.google.com/ menggunakan akun Google guru.
-2. Klik New project.
-3. Ganti kode contoh di Code.gs dengan seluruh isi file apps-script/Code.gs dari repositori ini.
-4. Simpan project.
+- `apps-script/Code.gs`: backend Drive + Sheets.
+- `apps-script/SubmissionForm.html`: halaman upload dengan notifikasi.
+- `submission-config.js`: URL Web App untuk tombol di halaman statis.
+- `submission.js`: membuka halaman upload Apps Script.
 
-## 2. Siapkan Drive dan Spreadsheet
+## Update project Apps Script
 
-1. Di editor Apps Script, pilih fungsi setup pada dropdown fungsi.
-2. Klik Run.
-3. Berikan izin akses Google Drive dan Google Sheets.
-4. Setelah selesai, buka Execution log untuk melihat tautan Spreadsheet rekap dan folder Drive.
-5. Script menyimpan ID keduanya di Script Properties. Jalankan setup() cukup sekali; pemanggilan ulang tidak membuat folder dan spreadsheet duplikat jika properti sudah tersimpan.
+1. Buka project Apps Script yang saat ini dipakai menyimpan data.
+2. Ganti isi `Code.gs` dengan versi dari `apps-script/Code.gs` di repositori.
+3. Tambahkan file HTML baru bernama **SubmissionForm** (nama file tanpa .html di editor Apps Script), lalu salin isi `apps-script/SubmissionForm.html`.
+4. Pastikan fungsi `setup()` yang sebelumnya sudah dijalankan. Tidak perlu dijalankan ulang selama Script Properties `SPREADSHEET_ID` dan `FOLDER_ID` masih ada.
+5. Klik **Deploy → Manage deployments → Edit** pada deployment Web App yang sedang digunakan.
+6. Pilih **New version**, lalu **Deploy**. URL `/exec` deployment yang sama biasanya tetap.
+7. Pastikan akses Web App mengizinkan siswa membuka form. Jika memilih **Anyone**, endpoint dapat diakses publik.
 
-Spreadsheet memiliki sheet Pengumpulan dengan kolom waktu, nama, kelas, file, ukuran, tipe file, link Drive, dan ID pengumpulan.
+## Hubungkan halaman statis
 
-## 3. Deploy sebagai Web App
+`submission-config.js` saat ini menyimpan URL deployment yang sudah dipakai. Jangan mengubah URL itu apabila deployment yang sama diperbarui. Commit/push file statis di branch `main` jika ada perubahan.
 
-1. Klik Deploy → New deployment.
-2. Pilih tipe Web app.
-3. Atur Execute as menjadi akun guru (Me).
-4. Atur Who has access menjadi Anyone agar siswa dapat mengirim dari halaman GitHub Pages. Jika pilihan Anyone dibatasi oleh Google Workspace sekolah, gunakan kebijakan akses organisasi yang sesuai.
-5. Klik Deploy, selesaikan otorisasi bila diminta, lalu salin URL Web App yang berakhiran /exec.
+Siswa membuka halaman tugas → klik **Buka Form Pengumpulan** → mengisi nama dan kelas → memilih satu file PDF/DOC/DOCX maksimal 10 MB → klik **Kirim Tugas**. Konfirmasi berhasil/gagal muncul di halaman Apps Script yang terbuka pada tab baru.
 
-Catatan: endpoint ini bersifat publik sesuai pengaturan akses deployment. Backend membatasi unggahan menjadi PDF/DOC/DOCX dengan ukuran maksimal 10 MB.
+## Hasil penyimpanan
 
-## 4. Hubungkan dengan halaman GitHub Pages
+Berkas disimpan di folder Drive `Pengumpulan Tugas Surat Resmi`. Metadata dicatat di spreadsheet `Rekap Pengumpulan Tugas Surat Resmi`, sheet `Pengumpulan`.
 
-1. Buka file submission-config.js di repositori.
-2. Ganti PASTE_URL_WEB_APP_APPS_SCRIPT_DI_SINI dengan URL Web App /exec yang baru disalin.
-3. Commit perubahan ke branch main.
-4. Pastikan index.html, submission.js, dan submission-config.js berada di root repositori yang sama.
-5. Buka halaman GitHub Pages dan lakukan uji kirim menggunakan satu file percobaan kecil.
-
-## 5. Cara memeriksa hasil
-
-- Buka folder Google Drive Pengumpulan Tugas Surat Resmi untuk melihat berkas siswa.
-- Buka Spreadsheet Rekap Pengumpulan Tugas Surat Resmi untuk memeriksa nama, kelas, waktu, serta tautan setiap berkas.
-- Jika kode Apps Script diubah, buat deployment version baru melalui Deploy → Manage deployments → Edit → New version → Deploy.
-
-## Catatan teknis
-
-- Browser mengirim data melalui form tersembunyi ke Apps Script. Respons dikirim kembali ke halaman dengan postMessage, sehingga halaman statis tidak bergantung pada pembacaan respons fetch lintas-origin.
-- File yang berhasil disimpan tetapi gagal dicatat ke spreadsheet akan dipindahkan ke Trash agar tidak meninggalkan file tanpa catatan.
-- Setiap pengiriman dicatat sebagai baris baru. Pengiriman ulang oleh siswa akan membuat catatan dan berkas baru.
-- URL deployment Apps Script tidak dimasukkan ke repositori sampai guru menyalinnya sendiri ke submission-config.js. Jangan menaruh password atau kredensial rahasia di file frontend.
+Jika pengiriman sukses di Drive/Sheets tetapi siswa tidak melihat konfirmasi, pastikan Apps Script sudah diperbarui ke **New version** dan file HTML `SubmissionForm` sudah ditambahkan ke project Apps Script yang sama.
