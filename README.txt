@@ -1,26 +1,17 @@
 PAKET HALAMAN TUGAS SURAT RESMI
 
 ISI REPOSITORI
-- index.html                  Halaman tugas dan form pengumpulan
-- Surat Resmi.docx            Template surat resmi
-- Data Surat Resmi.xlsx       Sumber data mail merge (10 penerima)
-- submission.js               Validasi dan pengiriman berkas siswa
-- submission-config.js        Konfigurasi URL Web App Apps Script
-- apps-script/Code.gs         Backend penyimpanan Drive dan pencatatan Sheets
-- APPS_SCRIPT_SETUP.md        Panduan setup dan deployment Apps Script
+- index.html                      Halaman tugas dan tombol pengumpulan
+- Surat Resmi.docx                Template surat resmi
+- Data Surat Resmi.xlsx           Sumber data mail merge (10 penerima)
+- submission.js                   Membuka form pengumpulan Apps Script
+- submission-config.js            URL deployment Apps Script
+- apps-script/Code.gs             Backend penyimpanan Drive dan Sheets
+- apps-script/SubmissionForm.html  Form upload dan notifikasi berhasil/gagal
+- APPS_SCRIPT_SETUP.md             Panduan setup dan deployment
 
-FITUR PENGUMPULAN
-- Input nama lengkap dan kelas siswa.
-- Unggah PDF, DOC, atau DOCX maksimal 10 MB.
-- File disimpan di Google Drive.
-- Metadata pengumpulan dicatat di Google Sheets.
+PENGUMPULAN TUGAS
+Form upload berjalan di halaman Apps Script. Setelah proses selesai, notifikasi sukses/gagal tampil langsung di tab form. File disimpan ke Google Drive dan metadata ke Google Sheets.
 
-AKTIVASI APPS SCRIPT
-1. Ikuti APPS_SCRIPT_SETUP.md.
-2. Salin apps-script/Code.gs ke project di script.google.com.
-3. Jalankan setup(), lalu deploy sebagai Web App.
-4. Tempel URL deployment yang berakhiran /exec ke submission-config.js.
-5. Commit perubahan konfigurasi ke branch main.
-
-CARA MEMPUBLIKASIKAN
-Aktifkan GitHub Pages dari branch main (root). Pastikan file template Word dan Excel tetap berada di root yang sama dengan index.html.
+PENTING
+Setelah memperbarui Code.gs atau menambahkan SubmissionForm.html di Apps Script, lakukan Deploy -> Manage deployments -> Edit -> New version -> Deploy agar versi Web App terbaru digunakan.
