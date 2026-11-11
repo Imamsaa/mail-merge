@@ -127,7 +127,7 @@
         u32(0x02014b50), u16(20), u16(20), u16(0x0800), u16(0),
         u16(0), u16(0), u32(checksum), u32(dataBytes.length),
         u32(dataBytes.length), u16(nameBytes.length), u16(0),
-        u16(0), u16(0), u32(0), u32(localOffset)
+        u16(0), u16(0), u16(0), u32(0), u32(localOffset)
       ]);
       centralParts.push(centralHeader, nameBytes);
       localOffset += localHeader.length + nameBytes.length + dataBytes.length;
@@ -162,7 +162,7 @@
     document.body.appendChild(link);
     link.click();
     link.remove();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   const button = document.getElementById("downloadDatabase");
