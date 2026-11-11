@@ -4,279 +4,241 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101d35">
-  <meta name="description" content="Halaman tugas Informatika: membuat surat resmi menggunakan fitur Mail Merge Microsoft Word.">
-  <title>Tugas Informatika — Surat Resmi & Mail Merge</title>
+  <meta name="description" content="Soal praktikum Mail Merge: membuat 15 surat resmi untuk Lembaga Pemberdayaan Masyarakat Nusantara.">
+  <title>Praktikum Mail Merge — Sekretaris Organisasi yang Efisien</title>
   <style>
     :root {
-      --navy: #101d35;
-      --navy-2: #172947;
-      --ink: #1b2638;
-      --muted: #64748b;
-      --paper: #f4f7fb;
-      --line: #e3eaf2;
-      --white: #fff;
-      --blue: #2563eb;
-      --blue-dark: #1d4ed8;
-      --gold: #f5bd4f;
-      --mint: #dff7ee;
-      --mint-ink: #08744e;
-      --soft-blue: #eaf1ff;
-      --shadow: 0 18px 50px rgba(16, 29, 53, .09);
-      --radius: 22px;
+      --navy:#101d35; --navy2:#172947; --ink:#1b2638; --muted:#64748b;
+      --paper:#f4f7fb; --line:#e3eaf2; --blue:#2563eb; --gold:#f5bd4f;
+      --soft:#eaf1ff; --green:#effbf5; --green-line:#bee8d3;
+      --shadow:0 18px 50px rgba(16,29,53,.08); --radius:20px;
     }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.65;
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.65}
+    a{color:inherit}
+    .wrap{width:min(1020px,calc(100% - 36px));margin:0 auto}
+    .hero{padding:55px 0 62px;color:#fff;background:radial-gradient(circle at 85% 15%,rgba(53,104,186,.34),transparent 28%),linear-gradient(135deg,var(--navy),#172d50 72%,#203b65)}
+    .eyebrow{display:inline-flex;align-items:center;gap:9px;color:#c8d8f1;font-size:11px;font-weight:850;letter-spacing:.15em;text-transform:uppercase}
+    .eyebrow:before{content:"";width:22px;height:3px;border-radius:9px;background:var(--gold)}
+    h1{max-width:790px;margin:16px 0 12px;font-size:clamp(34px,5.8vw,56px);line-height:1.08;letter-spacing:-.045em}
+    .hero p{max-width:710px;margin:0;color:#d3deee;font-size:16px}
+    .hero-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:24px}
+    .tag{padding:6px 11px;border:1px solid rgba(255,255,255,.2);border-radius:99px;background:rgba(255,255,255,.07);color:#e5edf8;font-size:11px;font-weight:750}
+    main{padding:30px 0 64px}
+    .panel{padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow)}
+    .download-panel{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+    .kicker{margin:0 0 5px;color:var(--blue);font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+    h2{margin:0;color:var(--navy);font-size:clamp(22px,3vw,28px);line-height:1.2;letter-spacing:-.025em}
+    .muted{color:var(--muted)}
+    .download-desc{margin:8px 0 0;color:var(--muted);font-size:13px}
+    .download-link,.submit-button{display:inline-flex;justify-content:center;align-items:center;gap:10px;min-height:46px;padding:0 18px;border:0;border-radius:11px;background:var(--blue);color:#fff;text-decoration:none;font-size:13px;font-weight:850;cursor:pointer;transition:.18s ease}
+    .download-link:hover,.submit-button:hover{background:#1d4ed8;transform:translateY(-1px)}
+    .download-link small{display:block;font-size:10px;font-weight:600;opacity:.85}
+    .notice{display:flex;gap:12px;margin:18px 0 28px;padding:14px 16px;border:1px solid var(--green-line);border-radius:14px;background:var(--green);color:#235943;font-size:13px}
+    .notice strong{color:#145b3d}
+    .notice-icon{font-size:19px}
+    .section-title{margin:36px 0 15px}
+    .section-title p{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .case-copy{margin:12px 0 0;color:#475569;font-size:14px}
+    .org{color:var(--navy);font-weight:850}
+    .task-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .task-card{display:flex;gap:13px;padding:18px;border:1px solid var(--line);border-radius:16px;background:#fff}
+    .task-no{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:var(--soft);color:#1d4ed8;font-size:13px;font-weight:900}
+    .task-card h3{margin:0 0 5px;color:var(--navy);font-size:14px}
+    .task-card p,.task-card ul{margin:0;color:var(--muted);font-size:12px}
+    .task-card ul{padding-left:17px;margin-top:5px}
+    .task-card li{margin:2px 0}
+    .mapping{margin-top:24px;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#fff}
+    .mapping-head{padding:18px 20px 12px}
+    .mapping-head p{margin:6px 0 0;color:var(--muted);font-size:12px}
+    .table-scroll{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th{padding:10px 14px;background:#f4f7fb;color:#52627a;text-align:left;font-size:10px;letter-spacing:.07em;text-transform:uppercase}
+    td{padding:11px 14px;border-top:1px solid #edf1f6}
+    code{padding:3px 7px;border-radius:6px;background:#edf3ff;color:#214da4;font-family:ui-monospace,monospace;font-size:11px;white-space:nowrap}
+    .requirements{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+    .requirement{padding:17px;border:1px solid var(--line);border-radius:15px;background:#fff}
+    .requirement h3{margin:0 0 7px;color:var(--navy);font-size:13px}
+    .requirement ul{margin:0;padding-left:18px;color:var(--muted);font-size:12px}
+    .challenge{margin-top:24px;padding:21px;border:1px solid #f1dfb6;border-radius:17px;background:#fff8e9}
+    .challenge h2{color:#795316;font-size:20px}
+    .challenge p{margin:7px 0 0;color:#806d4d;font-size:13px}
+    .upload-panel{margin-top:28px;padding:25px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;box-shadow:var(--shadow)}
+    .upload-panel p{margin:8px 0 18px;color:var(--muted);font-size:13px}
+    .upload-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+    .upload-button{min-height:48px}
+    .upload-note{font-size:11px;color:var(--muted)}
+    .status{margin-top:15px;padding:12px 14px;border:1px solid #cfe0ff;border-radius:11px;background:#eff5ff;color:#24508d;font-size:12px}
+    .warning{margin-top:12px;padding:11px 13px;border:1px solid #f2e1b7;border-radius:10px;background:#fff8e8;color:#805a16;font-size:12px}
+    footer{padding:20px 0 30px;border-top:1px solid var(--line);color:#8290a3;text-align:center;font-size:11px}
+    @media(max-width:700px){
+      .hero{padding:42px 0 48px}
+      .download-panel{grid-template-columns:1fr}
+      .download-link{width:100%}
+      .task-grid,.requirements{grid-template-columns:1fr}
+      .panel{padding:19px}
+      .upload-panel{padding:20px}
+      .upload-button{width:100%}
     }
-    a { color: inherit; }
-    .wrap { width: min(1080px, calc(100% - 40px)); margin: 0 auto; }
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 58px 0 68px;
-      color: white;
-      background: radial-gradient(circle at 82% 16%, rgba(53, 104, 186, .34), transparent 29%),
-                  linear-gradient(135deg, var(--navy), #172d50 72%, #203b65);
-    }
-    .hero::after {
-      content: ""; position: absolute; width: 350px; height: 350px; border: 1px solid rgba(255,255,255,.10);
-      border-radius: 50%; right: -95px; bottom: -245px; box-shadow: 0 0 0 35px rgba(255,255,255,.025), 0 0 0 75px rgba(255,255,255,.02);
-    }
-    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: #c8d8f1; font-size: 12px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
-    .eyebrow::before { content: ""; width: 22px; height: 3px; border-radius: 8px; background: var(--gold); }
-    h1 { max-width: 760px; margin: 18px 0 14px; font-size: clamp(36px, 6vw, 60px); line-height: 1.07; letter-spacing: -.045em; }
-    .hero p { max-width: 660px; margin: 0; color: #d3deee; font-size: 17px; }
-    .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
-    .pill { padding: 7px 12px; border: 1px solid rgba(255,255,255,.2); border-radius: 99px; color: #e5edf8; background: rgba(255,255,255,.07); font-size: 12px; font-weight: 700; }
-    main { padding: 34px 0 70px; }
-    .download-panel {
-      display: grid; grid-template-columns: 1.1fr .9fr; gap: 24px; align-items: center;
-      margin-top: -6px; padding: 26px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
-    }
-    .section-kicker { margin: 0 0 5px; color: var(--blue); font-size: 11px; font-weight: 850; letter-spacing: .14em; text-transform: uppercase; }
-    h2 { margin: 0; color: var(--navy); font-size: clamp(23px, 3vw, 30px); line-height: 1.2; letter-spacing: -.025em; }
-    .download-intro { margin: 9px 0 0; color: var(--muted); font-size: 14px; }
-    .files { display: grid; gap: 10px; }
-    .file-link {
-      display: flex; align-items: center; gap: 13px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 15px;
-      text-decoration: none; transition: .18s ease; background: #fff;
-    }
-    .file-link:hover { border-color: #a9c2fb; transform: translateY(-2px); box-shadow: 0 8px 22px rgba(37,99,235,.08); }
-    .file-icon { display: grid; place-items: center; flex: 0 0 42px; height: 42px; border-radius: 12px; font-size: 12px; font-weight: 900; }
-    .doc { color: #185abd; background: #e7f0ff; }
-    .xls { color: #137747; background: #e2f7e9; }
-    .file-name { min-width: 0; flex: 1; }
-    .file-name strong { display: block; overflow-wrap: anywhere; color: var(--ink); font-size: 13px; }
-    .file-name small { display: block; color: var(--muted); font-size: 11px; }
-    .download-arrow { color: var(--blue); font-size: 20px; font-weight: 800; }
-    .notice { display: flex; gap: 12px; margin: 22px 0 34px; padding: 15px 17px; border: 1px solid #cde8dc; border-radius: 16px; background: #effbf5; color: #235943; font-size: 13px; }
-    .notice b { color: #145b3d; }
-    .notice-icon { flex: 0 0 auto; font-size: 18px; }
-    .section-head { display: flex; gap: 20px; align-items: end; justify-content: space-between; margin: 40px 0 18px; }
-    .section-head p { max-width: 430px; margin: 0; color: var(--muted); font-size: 13px; }
-    .steps { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    .step {
-      display: flex; gap: 15px; padding: 19px; border: 1px solid var(--line); border-radius: 18px; background: #fff;
-    }
-    .step-num { display: grid; place-items: center; flex: 0 0 36px; height: 36px; border-radius: 11px; background: var(--soft-blue); color: var(--blue-dark); font-size: 14px; font-weight: 900; }
-    .step h3 { margin: 0 0 5px; color: var(--navy); font-size: 15px; }
-    .step p { margin: 0; color: var(--muted); font-size: 13px; }
-    .path { display: inline-block; margin-top: 7px; padding: 4px 8px; border-radius: 7px; background: #f1f5f9; color: #334155; font-size: 11px; font-weight: 750; }
-    .mapping-card { margin-top: 34px; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; }
-    .mapping-card .sub { margin: 7px 0 18px; color: var(--muted); font-size: 13px; }
-    .table-scroll { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th { padding: 10px 12px; text-align: left; color: #52627a; background: #f6f8fc; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
-    td { padding: 11px 12px; border-bottom: 1px solid #edf1f6; vertical-align: top; }
-    tr:last-child td { border-bottom: 0; }
-    td:first-child { color: #4b5b72; }
-    code { display: inline-block; padding: 3px 7px; border-radius: 6px; background: #edf3ff; color: #214da4; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; white-space: nowrap; }
-    .tips { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
-    .tip { padding: 17px; border-radius: 16px; background: #fff8e9; border: 1px solid #f4e4bd; }
-    .tip h3 { margin: 0 0 5px; color: #795316; font-size: 13px; }
-    .tip p { margin: 0; color: #806d4d; font-size: 12px; }
-    .deliverable { display: flex; gap: 14px; align-items: flex-start; margin-top: 30px; padding: 22px; border-radius: 18px; color: white; background: var(--navy-2); }
-    .deliverable-icon { font-size: 25px; }
-    .deliverable h2 { color: white; font-size: 20px; }
-    .deliverable p { margin: 5px 0 0; color: #c5d2e5; font-size: 13px; }
-    footer { padding: 22px 0 34px; border-top: 1px solid var(--line); color: #8290a3; text-align: center; font-size: 11px; }
-    @media (max-width: 720px) {
-      .hero { padding: 44px 0 54px; }
-      .download-panel { grid-template-columns: 1fr; padding: 20px; }
-      .section-head { display: block; }
-      .section-head p { margin-top: 8px; }
-      .steps, .tips { grid-template-columns: 1fr; }
-      .mapping-card { padding: 18px; }
-    }
-
-    .submission-card { margin-top: 28px; padding: 26px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); }
-    .submission-intro { margin: 8px 0 20px; max-width: 700px; color: var(--muted); font-size: 13px; }
-    .submission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .field { display: flex; flex-direction: column; gap: 7px; }
-    .field.full { grid-column: 1 / -1; }
-    .field label { color: var(--navy); font-size: 13px; font-weight: 800; }
-    .field input:not([type="file"]) { width: 100%; min-height: 46px; padding: 11px 13px; border: 1px solid #d9e2ee; border-radius: 11px; background: #fbfcfe; color: var(--ink); font: inherit; font-size: 14px; outline: none; }
-    .field input:focus { border-color: #7da5f8; box-shadow: 0 0 0 3px rgba(37,99,235,.10); }
-    .upload-box { display: block; padding: 20px; border: 1.5px dashed #b8c8df; border-radius: 15px; background: #f8faff; text-align: center; cursor: pointer; transition: .18s ease; }
-    .upload-box:hover, .upload-box:focus-within { border-color: var(--blue); background: #f1f6ff; }
-    .upload-icon { display: block; margin-bottom: 7px; color: var(--blue); font-size: 25px; }
-    .upload-box strong { display: block; color: var(--navy); font-size: 13px; }
-    .upload-box small { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; }
-    .upload-box input { display: block; max-width: 100%; margin: 12px auto 0; color: var(--muted); font: inherit; font-size: 12px; }
-    .file-selected { margin: 8px 0 0; color: var(--mint-ink); font-size: 12px; font-weight: 750; overflow-wrap: anywhere; }
-    .submit-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 18px; }
-    .submit-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 47px; padding: 0 21px; border: 0; border-radius: 12px; background: var(--blue); color: #fff; font: inherit; font-size: 13px; font-weight: 850; cursor: pointer; transition: .18s ease; }
-    .submit-button:hover:not(:disabled) { background: var(--blue-dark); transform: translateY(-1px); }
-    .submit-button:disabled { cursor: not-allowed; opacity: .55; }
-    .submit-note { color: var(--muted); font-size: 11px; }
-    .submission-status { display: none; margin-top: 16px; padding: 13px 15px; border: 1px solid transparent; border-radius: 12px; font-size: 13px; }
-    .submission-status.show { display: block; }
-    .submission-status.info { color: #24508d; border-color: #cfe0ff; background: #eff5ff; }
-    .submission-status.success { color: #176344; border-color: #bee8d3; background: #effbf5; }
-    .submission-status.error { color: #9b2c2c; border-color: #f3caca; background: #fff4f4; }
-    .config-warning { margin-top: 14px; padding: 11px 13px; border-radius: 11px; color: #805a16; background: #fff8e8; border: 1px solid #f2e1b7; font-size: 12px; }
-    .honeypot { position: absolute !important; left: -10000px !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
-    @media (max-width: 720px) { .submission-card { padding: 19px; } .submission-grid { grid-template-columns: 1fr; } .field.full { grid-column: auto; } .submit-button { width: 100%; } .submit-row { align-items: stretch; } }
-
   </style>
 </head>
 <body>
   <header class="hero">
     <div class="wrap">
-      <div class="eyebrow">Tugas Praktik Informatika</div>
-      <h1>Membuat Surat Resmi dengan <span style="color:var(--gold)">Mail Merge</span></h1>
-      <p>Gunakan Microsoft Word dan Microsoft Excel untuk membuat surat resmi secara otomatis berdasarkan data penerima.</p>
-      <div class="hero-meta">
-        <span class="pill">Microsoft Word</span>
-        <span class="pill">Microsoft Excel</span>
-        <span class="pill">10 data penerima</span>
+      <div class="eyebrow">Soal Praktikum · Informatika</div>
+      <h1>Sekretaris Organisasi yang Efisien</h1>
+      <p>Membuat Surat Resmi dengan Mail Merge. Gunakan Microsoft Excel dan Microsoft Word untuk menghasilkan 15 surat resmi secara otomatis bagi Lembaga Pemberdayaan Masyarakat Nusantara (LPMN).</p>
+      <div class="hero-tags">
+        <span class="tag">Microsoft Word</span>
+        <span class="tag">Microsoft Excel</span>
+        <span class="tag">Mail Merge</span>
+        <span class="tag">15 Penerima</span>
       </div>
     </div>
   </header>
 
   <main class="wrap">
-    <section class="download-panel" aria-labelledby="download-title">
+    <section class="panel download-panel" aria-labelledby="download-title">
       <div>
-        <p class="section-kicker">Mulai dari sini</p>
-        <h2 id="download-title">Unduh file tugas</h2>
-        <p class="download-intro">Unduh kedua file berikut. Simpan dalam satu folder agar mudah ditemukan saat mengerjakan Mail Merge.</p>
+        <p class="kicker">Database Mail Merge</p>
+        <h2 id="download-title">Unduh Data Surat</h2>
+        <p class="download-desc">Gunakan file Excel ini sebagai sumber data Mail Merge. Di dalamnya sudah tersedia 15 penerima dari berbagai kecamatan di Kabupaten Grobogan.</p>
       </div>
-      <div class="files">
-        <a class="file-link" href="Surat%20Resmi.docx" download>
-          <span class="file-icon doc">DOCX</span>
-          <span class="file-name"><strong>Surat Resmi.docx</strong><small>Template surat resmi — Microsoft Word</small></span>
-          <span class="download-arrow" aria-hidden="true">↓</span>
-        </a>
-        <a class="file-link" href="Data%20Surat%20Resmi.xlsx" download>
-          <span class="file-icon xls">XLSX</span>
-          <span class="file-name"><strong>Data Surat Resmi.xlsx</strong><small>Data penerima — Microsoft Excel</small></span>
-          <span class="download-arrow" aria-hidden="true">↓</span>
-        </a>
-      </div>
+      <a class="download-link" id="downloadDatabase" href="#" download="Data_surat.xlsx">
+        <span aria-hidden="true">↓</span>
+        <span>Unduh Excel<small>Data_surat.xlsx · 15 penerima</small></span>
+      </a>
     </section>
 
     <div class="notice">
       <span class="notice-icon" aria-hidden="true">✓</span>
-      <div><b>Target tugas:</b> hasilkan surat untuk seluruh penerima pada file Excel. Data yang tersedia berjumlah 10 baris penerima. Jangan mengubah nama kolom pada baris pertama Excel.</div>
+      <div><strong>Perhatikan:</strong> Kamu tidak diberikan template surat Word. Kamu harus merancang sendiri template surat resmi LPMN, kemudian menghubungkannya dengan database Excel menggunakan Mail Merge.</div>
     </div>
 
-    <section aria-labelledby="steps-title">
-      <div class="section-head">
-        <div>
-          <p class="section-kicker">Panduan pengerjaan</p>
-          <h2 id="steps-title">Langkah-langkah Mail Merge</h2>
-        </div>
-        <p>Ikuti urutan berikut di Microsoft Word desktop. Nama menu dapat sedikit berbeda tergantung versi Word.</p>
-      </div>
+    <section class="panel" aria-labelledby="case-title">
+      <p class="kicker">Studi Kasus</p>
+      <h2 id="case-title">Kamu adalah sekretaris LPMN</h2>
+      <p class="case-copy">Kamu bekerja sebagai sekretaris di sebuah organisasi bernama <span class="org">Lembaga Pemberdayaan Masyarakat Nusantara (LPMN)</span>. Organisasi ini sedang menjalankan program koordinasi dan pemberdayaan masyarakat di berbagai kecamatan di Kabupaten Grobogan.</p>
+      <p class="case-copy">Dalam rangka menjalankan program tersebut, pimpinan organisasi meminta kamu membuat dan mengirimkan surat resmi kepada 15 orang perwakilan di berbagai kecamatan.</p>
+      <p class="case-copy">Setiap surat memiliki informasi penerima dan perihal yang berbeda. Beberapa surat berisi undangan pertemuan, permohonan kerja sama, permohonan bantuan, pemberitahuan kegiatan, hingga penyampaian laporan.</p>
+      <p class="case-copy">Biasanya, sekretaris harus membuat surat satu per satu. Namun, karena jumlah surat cukup banyak, pimpinan meminta kamu menggunakan fitur <strong>Mail Merge pada Microsoft Word</strong> agar seluruh surat dapat dibuat secara otomatis menggunakan data dari Microsoft Excel.</p>
+    </section>
 
-      <div class="steps">
-        <article class="step">
-          <span class="step-num">01</span>
-          <div><h3>Siapkan kedua file</h3><p>Unduh template Word dan data Excel. Simpan keduanya di satu folder. Buka <b>Surat Resmi.docx</b> menggunakan Microsoft Word.</p></div>
+    <section aria-labelledby="tasks-title">
+      <div class="section-title">
+        <p class="kicker">Tugas yang Harus Dikerjakan</p>
+        <h2 id="tasks-title">Selesaikan empat tahap berikut</h2>
+        <p>Kerjakan secara berurutan. Rancang template suratmu sendiri, jangan menggunakan template surat dari internet secara langsung.</p>
+      </div>
+      <div class="task-grid">
+        <article class="task-card">
+          <span class="task-no">01</span>
+          <div>
+            <h3>Membuat Database Excel</h3>
+            <p>Unduh dan gunakan data penerima yang telah disediakan. Pastikan nama kolom tidak diubah:</p>
+            <ul>
+              <li>Nomor_Surat</li><li>Kecamatan</li><li>Kabupaten</li><li>Nama</li><li>Perihal</li>
+            </ul>
+          </div>
         </article>
-        <article class="step">
-          <span class="step-num">02</span>
-          <div><h3>Mulai Mail Merge</h3><p>Pilih tab <b>Mailings</b>, lalu pilih <b>Start Mail Merge</b> dan tentukan jenis <b>Letters</b>.</p><span class="path">Mailings → Start Mail Merge → Letters</span></div>
+        <article class="task-card">
+          <span class="task-no">02</span>
+          <div>
+            <h3>Membuat Template Surat Resmi</h3>
+            <p>Buat dokumen Word baru dari awal. Template wajib memiliki:</p>
+            <ul>
+              <li>Kop surat organisasi LPMN.</li>
+              <li>Nomor surat dan perihal.</li>
+              <li>Nama dan alamat penerima.</li>
+              <li>Salam pembuka dan isi surat.</li>
+              <li>Salam penutup dan tanda tangan pengirim.</li>
+              <li>Bahasa Indonesia yang formal dan sopan.</li>
+            </ul>
+          </div>
         </article>
-        <article class="step">
-          <span class="step-num">03</span>
-          <div><h3>Hubungkan data Excel</h3><p>Pilih <b>Select Recipients</b> → <b>Use an Existing List</b>. Cari file <b>Data Surat Resmi.xlsx</b>, pilih sheet <b>Sheet1</b>, lalu pastikan baris pertama berisi nama kolom.</p><span class="path">Mailings → Select Recipients</span></div>
+        <article class="task-card">
+          <span class="task-no">03</span>
+          <div>
+            <h3>Menghubungkan Excel dengan Word</h3>
+            <p>Gunakan menu Mailings untuk menghubungkan database Excel dengan template Word. Masukkan Merge Field di posisi yang sesuai agar data penerima dan perihal berubah otomatis.</p>
+          </div>
         </article>
-        <article class="step">
-          <span class="step-num">04</span>
-          <div><h3>Masukkan Merge Field</h3><p>Ganti setiap titik-titik pada template dengan field yang sesuai. Letakkan kursor di posisi yang benar, lalu pilih <b>Insert Merge Field</b> dan klik nama kolomnya.</p><span class="path">Mailings → Insert Merge Field</span></div>
-        </article>
-        <article class="step">
-          <span class="step-num">05</span>
-          <div><h3>Periksa hasil sementara</h3><p>Klik <b>Preview Results</b>. Gunakan tombol navigasi untuk melihat data penerima berikutnya. Pastikan nama, kelas, nomor, dan isi surat berubah sesuai data.</p><span class="path">Mailings → Preview Results</span></div>
-        </article>
-        <article class="step">
-          <span class="step-num">06</span>
-          <div><h3>Buat seluruh surat</h3><p>Pilih <b>Finish &amp; Merge</b> → <b>Edit Individual Documents</b> → <b>All</b>. Word akan membuat dokumen baru berisi surat untuk semua penerima.</p><span class="path">Finish &amp; Merge → Edit Individual Documents</span></div>
-        </article>
-        <article class="step">
-          <span class="step-num">07</span>
-          <div><h3>Simpan hasil akhir</h3><p>Simpan dokumen gabungan dalam format Word. Setelah diperiksa, ekspor atau simpan juga sebagai PDF bila diperlukan.</p><span class="path">File → Save As / Export → PDF</span></div>
-        </article>
-        <article class="step">
-          <span class="step-num">08</span>
-          <div><h3>Periksa tata letak</h3><p>Pastikan tidak ada field yang tertinggal, teks terpotong, atau tanda titik-titik dari template. Periksa setiap surat sebelum dikumpulkan.</p></div>
+        <article class="task-card">
+          <span class="task-no">04</span>
+          <div>
+            <h3>Menghasilkan Surat</h3>
+            <p>Jalankan Finish &amp; Merge hingga menghasilkan 15 surat resmi. Setiap surat harus sesuai dengan satu baris data penerima pada Excel.</p>
+          </div>
         </article>
       </div>
     </section>
 
-    <section class="mapping-card" aria-labelledby="mapping-title">
-      <p class="section-kicker">Referensi field</p>
-      <h2 id="mapping-title">Field yang harus dimasukkan</h2>
-      <p class="sub">Gunakan nama field dari Excel berikut. Masukkan melalui menu <b>Insert Merge Field</b>, bukan mengetik tanda kurung siku secara manual.</p>
+    <section class="mapping" aria-labelledby="mapping-title">
+      <div class="mapping-head">
+        <p class="kicker">Referensi Merge Field</p>
+        <h2 id="mapping-title">Lima field dari database Excel</h2>
+        <p>Masukkan field berikut melalui menu <strong>Mailings → Insert Merge Field</strong> di Microsoft Word.</p>
+      </div>
       <div class="table-scroll">
         <table>
-          <thead><tr><th>Bagian pada template Word</th><th>Merge Field dari Excel</th></tr></thead>
+          <thead><tr><th>Nama Kolom Excel</th><th>Contoh Penempatan pada Surat</th></tr></thead>
           <tbody>
-            <tr><td>Nomor surat</td><td><code>Nomor_Surat</code></td></tr>
-            <tr><td>Perihal</td><td><code>Perihal</code></td></tr>
-            <tr><td>Nama Bapak/Ibu penerima</td><td><code>Nama</code></td></tr>
-            <tr><td>Nama siswa</td><td><code>Nama_Siswa</code></td></tr>
-            <tr><td>Kelas siswa</td><td><code>Kelas</code></td></tr>
-            <tr><td>Latar belakang surat</td><td><code>Latar_Belakang</code></td></tr>
-            <tr><td>Isi surat</td><td><code>Isi_Surat</code></td></tr>
-            <tr><td>Nama kepala sekolah pada bagian tanda tangan</td><td><code>Nama_Kepala_Sekolah</code></td></tr>
+            <tr><td><code>Nomor_Surat</code></td><td>Nomor: [Nomor_Surat]</td></tr>
+            <tr><td><code>Nama</code></td><td>Yth. Bapak/Ibu [Nama]</td></tr>
+            <tr><td><code>Kecamatan</code></td><td>Kecamatan [Kecamatan]</td></tr>
+            <tr><td><code>Kabupaten</code></td><td>Kabupaten [Kabupaten]</td></tr>
+            <tr><td><code>Perihal</code></td><td>Perihal: [Perihal]</td></tr>
           </tbody>
         </table>
       </div>
-      <div class="tips">
-        <div class="tip"><h3>Tips penempatan</h3><p>Contoh: pada kalimat “Sehubungan dengan … latar belakang …” sisipkan field <b>Latar_Belakang</b>. Pada baris nama penerima, sisipkan field <b>Nama</b>.</p></div>
-        <div class="tip"><h3>Jangan ubah sumber data</h3><p>Jangan mengganti atau menghapus judul kolom di Excel. Jika nama kolom berubah, Word bisa gagal menemukan field yang digunakan.</p></div>
+    </section>
+
+    <section class="requirements" aria-label="Ketentuan hasil akhir dan file yang dikumpulkan">
+      <div class="requirement">
+        <h3>Ketentuan Hasil Akhir</h3>
+        <ul>
+          <li>Satu penerima mendapatkan satu surat.</li>
+          <li>Total menghasilkan 15 surat.</li>
+          <li>Tidak ada data penerima yang tertukar.</li>
+          <li>Tidak ada Merge Field yang masih berupa kode.</li>
+          <li>Format surat rapi dan profesional.</li>
+        </ul>
+      </div>
+      <div class="requirement">
+        <h3>File yang Dikumpulkan</h3>
+        <ul>
+          <li><strong>Template_Surat.docx</strong> — template sebelum Mail Merge.</li>
+          <li><strong>Hasil_Mail_Merge.docx</strong> — hasil penggabungan seluruh surat.</li>
+          <li>Unggah kedua file melalui form pengumpulan di bawah.</li>
+        </ul>
       </div>
     </section>
 
+    <section class="challenge" aria-labelledby="challenge-title">
+      <p class="kicker">Tantangan Tambahan</p>
+      <h2 id="challenge-title">Pimpinan meminta 5 penerima baru!</h2>
+      <p>Bayangkan pimpinan tiba-tiba meminta kamu menambahkan 5 penerima baru ke dalam daftar. Apakah kamu harus membuat ulang seluruh surat dari awal? Tambahkan 5 baris penerima baru pada database, lalu gunakan Mail Merge untuk membuktikan bahwa kamu dapat memperbarui data dan menghasilkan surat tambahan dengan lebih efisien.</p>
+    </section>
 
-    <section class="submission-card" id="pengumpulan" aria-labelledby="submission-title">
-      <p class="section-kicker">Pengumpulan tugas</p>
-      <h2 id="submission-title">Kirim hasil pekerjaan</h2>
-      <p class="submission-intro">Setelah semua surat selesai dibuat dan diperiksa, buka form pengumpulan. Isi nama dan kelas, lalu pilih satu file hasil akhir dalam format PDF atau Word.</p>
-      <div class="submit-row">
-        <a class="submit-button" id="openSubmissionForm" href="#" target="_blank" rel="noopener" aria-disabled="true">
+    <section class="upload-panel" aria-labelledby="upload-title">
+      <p class="kicker">Pengumpulan Tugas</p>
+      <h2 id="upload-title">Kirim dua file hasil pekerjaanmu</h2>
+      <p>Pastikan template dan hasil Mail Merge sudah diperiksa. Form akan meminta nama, kelas, serta kedua file dalam format DOCX.</p>
+      <div class="upload-row">
+        <a class="submit-button upload-button" id="openSubmissionForm" href="#" target="_blank" rel="noopener" aria-disabled="true">
           <span aria-hidden="true">↗</span> Buka Form Pengumpulan
         </a>
-        <span class="submit-note">PDF, DOC, atau DOCX · Maksimal 10 MB</span>
+        <span class="upload-note">2 file DOCX · Maksimal 10 MB per file</span>
       </div>
-      <div class="submission-status info show" id="submissionInfo">Form terbuka di tab baru. Notifikasi berhasil atau gagal akan muncul langsung pada halaman form tersebut.</div>
-      <div class="config-warning" id="configWarning" hidden>Form belum diaktifkan. Guru perlu memasukkan URL deployment Apps Script ke submission-config.js.</div>
-    </section>
-
-    <section class="deliverable">
-      <div class="deliverable-icon" aria-hidden="true">📄</div>
-      <div><h2>Hasil yang harus diperoleh</h2><p>Satu dokumen gabungan yang berisi 10 surat resmi, masing-masing dengan data penerima yang berbeda. Periksa seluruh surat dan pastikan formatnya rapi sebelum dikumpulkan sesuai arahan guru.</p></div>
+      <div class="status" id="submissionInfo">Setelah form terbuka, unggah Template_Surat.docx dan Hasil_Mail_Merge.docx. Notifikasi berhasil akan muncul setelah kedua file tersimpan.</div>
+      <div class="warning" id="configWarning" hidden>Form belum diaktifkan. URL deployment Apps Script perlu diperiksa pada submission-config.js.</div>
     </section>
   </main>
-  <script src="./submission-config.js?v=3"></script>
-  <script src="./submission.js?v=3" defer></script>
-  <footer><div class="wrap">Tugas Praktik Informatika · Mail Merge Surat Resmi</div></footer>
+
+  <script src="./submission-config.js?v=4"></script>
+  <script src="./submission.js?v=4" defer></script>
+  <script src="./database-download.js?v=1" defer></script>
+  <footer><div class="wrap">Praktikum Informatika · Mail Merge · LPMN</div></footer>
 </body>
 </html>
