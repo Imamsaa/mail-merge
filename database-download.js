@@ -1,15 +1,158 @@
-/* Original database Excel file, packed as Base64 for a static download. */
+/* Builds the provided 15-row database as an Excel workbook in the browser. */
 (() => {
-  const encoded = "UEsDBBQABgAIAAAAIQBi7p1oXgEAAJAEAAATAAgCW0NvbnRlbnRfVHlwZXNdLnhtbCCiBAIooAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACslMtOwzAQRfdI/EPk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";
-  const button = document.getElementById("downloadDatabase");
-  if (!button) return;
+  "use strict";
 
-  button.addEventListener("click", (event) => {
-    event.preventDefault();
-    const binary = atob(encoded);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    const blob = new Blob([bytes], {
+  const rows = [
+    ["Nomor_Surat", "Kecamatan", "Kabupaten", "Nama", "Perihal"],
+    ["001/ORG/XI/2026", "Purwodadi", "Grobogan", "Ahmad Fauzi", "Permohonan Kerja Sama"],
+    ["002/ORG/XI/2026", "Wirosari", "Grobogan", "Budi Santoso", "Undangan Pertemuan"],
+    ["003/ORG/XI/2026", "Toroh", "Grobogan", "Siti Aminah", "Pemberitahuan Kegiatan"],
+    ["004/ORG/XI/2026", "Godong", "Grobogan", "Agus Setiawan", "Permohonan Bantuan"],
+    ["005/ORG/XI/2026", "Gubug", "Grobogan", "Dewi Lestari", "Permohonan Data"],
+    ["006/ORG/XI/2026", "Tegowanu", "Grobogan", "Rizky Pratama", "Undangan Rapat Koordinasi"],
+    ["007/ORG/XI/2026", "Brati", "Grobogan", "Nur Hidayah", "Surat Keterangan"],
+    ["008/ORG/XI/2026", "Klambu", "Grobogan", "Fajar Maulana", "Pemberitahuan Hasil Kegiatan"],
+    ["009/ORG/XI/2026", "Penawangan", "Grobogan", "Rina Wulandari", "Permohonan Izin"],
+    ["010/ORG/XI/2026", "Geyer", "Grobogan", "Dimas Saputra", "Penyampaian Laporan"],
+    ["011/ORG/XI/2026", "Karangrayung", "Grobogan", "Siti Nurhaliza", "Permohonan Rekomendasi"],
+    ["012/ORG/XI/2026", "Ngaringan", "Grobogan", "Andi Kurniawan", "Undangan Acara"],
+    ["013/ORG/XI/2026", "Kedungjati", "Grobogan", "Maya Anggraini", "Pemberitahuan Perubahan Jadwal"],
+    ["014/ORG/XI/2026", "Gabus", "Grobogan", "Arif Rahman", "Tindak Lanjut Permohonan"],
+    ["015/ORG/XI/2026", "Pulokulon", "Grobogan", "Lina Marlina", "Permohonan Informasi"]
+  ];
+
+  const encoder = new TextEncoder();
+  const xmlEscape = value => String(value)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+
+  function columnName(index) {
+    let name = "";
+    while (index > 0) {
+      const remainder = (index - 1) % 26;
+      name = String.fromCharCode(65 + remainder) + name;
+      index = Math.floor((index - 1) / 26);
+    }
+    return name;
+  }
+
+  const sheetRows = rows.map((row, rowIndex) => {
+    const cells = row.map((value, colIndex) => {
+      const ref = columnName(colIndex + 1) + (rowIndex + 1);
+      return '<c r="' + ref + '" t="inlineStr"><is><t xml:space="preserve">' +
+        xmlEscape(value) + '</t></is></c>';
+    }).join("");
+    return '<row r="' + (rowIndex + 1) + '">' + cells + '</row>';
+  }).join("");
+
+  const worksheetXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+    '<sheetData>' + sheetRows + '</sheetData></worksheet>';
+
+  const workbookXml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
+    'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+    '<sheets><sheet name="Sheet1" sheetId="1" r:id="rId1"/></sheets></workbook>';
+
+  const rootRels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
+    '</Relationships>';
+
+  const workbookRels = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+    '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>' +
+    '</Relationships>';
+
+  const contentTypes = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+    '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+    '<Default Extension="xml" ContentType="application/xml"/>' +
+    '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+    '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+    '</Types>';
+
+  const crcTable = (() => {
+    const table = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) {
+      let c = n;
+      for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      table[n] = c >>> 0;
+    }
+    return table;
+  })();
+
+  function crc32(bytes) {
+    let crc = 0xFFFFFFFF;
+    for (const byte of bytes) crc = crcTable[(crc ^ byte) & 0xFF] ^ (crc >>> 8);
+    return (crc ^ 0xFFFFFFFF) >>> 0;
+  }
+
+  function u16(value) {
+    return new Uint8Array([value & 255, (value >>> 8) & 255]);
+  }
+  function u32(value) {
+    return new Uint8Array([
+      value & 255, (value >>> 8) & 255,
+      (value >>> 16) & 255, (value >>> 24) & 255
+    ]);
+  }
+  function join(parts) {
+    const size = parts.reduce((sum, part) => sum + part.length, 0);
+    const result = new Uint8Array(size);
+    let offset = 0;
+    for (const part of parts) { result.set(part, offset); offset += part.length; }
+    return result;
+  }
+
+  function makeZip(files) {
+    const localParts = [];
+    const centralParts = [];
+    let localOffset = 0;
+
+    for (const file of files) {
+      const nameBytes = encoder.encode(file.name);
+      const dataBytes = encoder.encode(file.content);
+      const checksum = crc32(dataBytes);
+
+      const localHeader = join([
+        u32(0x04034b50), u16(20), u16(0x0800), u16(0),
+        u16(0), u16(0), u32(checksum), u32(dataBytes.length),
+        u32(dataBytes.length), u16(nameBytes.length), u16(0)
+      ]);
+      localParts.push(localHeader, nameBytes, dataBytes);
+
+      const centralHeader = join([
+        u32(0x02014b50), u16(20), u16(20), u16(0x0800), u16(0),
+        u16(0), u16(0), u32(checksum), u32(dataBytes.length),
+        u32(dataBytes.length), u16(nameBytes.length), u16(0),
+        u16(0), u16(0), u32(0), u32(localOffset)
+      ]);
+      centralParts.push(centralHeader, nameBytes);
+      localOffset += localHeader.length + nameBytes.length + dataBytes.length;
+    }
+
+    const centralDirectory = join(centralParts);
+    const localData = join(localParts);
+    const endRecord = join([
+      u32(0x06054b50), u16(0), u16(0),
+      u16(files.length), u16(files.length),
+      u32(centralDirectory.length), u32(localData.length), u16(0)
+    ]);
+    return join([localData, centralDirectory, endRecord]);
+  }
+
+  function downloadWorkbook() {
+    const files = [
+      { name: "[Content_Types].xml", content: contentTypes },
+      { name: "_rels/.rels", content: rootRels },
+      { name: "xl/workbook.xml", content: workbookXml },
+      { name: "xl/_rels/workbook.xml.rels", content: workbookRels },
+      { name: "xl/worksheets/sheet1.xml", content: worksheetXml }
+    ];
+    const archive = makeZip(files);
+    const blob = new Blob([archive], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     });
     const url = URL.createObjectURL(blob);
@@ -20,5 +163,13 @@
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
-  });
+  }
+
+  const button = document.getElementById("downloadDatabase");
+  if (button) {
+    button.addEventListener("click", event => {
+      event.preventDefault();
+      downloadWorkbook();
+    });
+  }
 })();
