@@ -1,17 +1,20 @@
-PAKET HALAMAN TUGAS SURAT RESMI
+PRAKTIKUM MAIL MERGE — LPMN
 
-ISI REPOSITORI
-- index.html                      Halaman tugas dan tombol pengumpulan
-- Surat Resmi.docx                Template surat resmi
-- Data Surat Resmi.xlsx           Sumber data mail merge (10 penerima)
-- submission.js                   Membuka form pengumpulan Apps Script
-- submission-config.js            URL deployment Apps Script
-- apps-script/Code.gs             Backend penyimpanan Drive dan Sheets
-- apps-script/SubmissionForm.html  Form upload dan notifikasi berhasil/gagal
-- APPS_SCRIPT_SETUP.md             Panduan setup dan deployment
+FILE UTAMA
+- index.html                       Soal praktikum dan petunjuk.
+- database-download.js             Unduhan database Excel 15 penerima.
+- submission-config.js             URL deployment Apps Script.
+- submission.js                    Membuka form pengumpulan.
+- apps-script/Code.gs              Backend penyimpanan Drive + rekap Sheets.
+- apps-script/SubmissionForm.html  Form upload dua file DOCX.
 
-PENGUMPULAN TUGAS
-Form upload berjalan di halaman Apps Script. Setelah proses selesai, notifikasi sukses/gagal tampil langsung di tab form. File disimpan ke Google Drive dan metadata ke Google Sheets.
+TUGAS SISWA
+Siswa membuat Template_Surat.docx sendiri, lalu menggunakan Mail Merge dengan database Excel untuk menghasilkan 15 surat dan menyimpan hasilnya sebagai Hasil_Mail_Merge.docx.
 
-PENTING
-Setelah memperbarui Code.gs atau menambahkan SubmissionForm.html di Apps Script, lakukan Deploy -> Manage deployments -> Edit -> New version -> Deploy agar versi Web App terbaru digunakan.
+PENGUMPULAN
+Siswa mengunggah dua file DOCX:
+1. Template_Surat.docx
+2. Hasil_Mail_Merge.docx
+
+AKTIVASI
+Perbarui Code.gs dan file HTML SubmissionForm pada project Apps Script yang telah digunakan, lalu Deploy -> Manage deployments -> Edit -> New version -> Deploy. Tidak perlu membuat project baru atau mengganti URL /exec.
