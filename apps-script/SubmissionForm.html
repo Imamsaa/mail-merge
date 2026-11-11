@@ -5,38 +5,39 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    :root { color-scheme:light; --navy:#101d35; --blue:#2563eb; --muted:#64748b; --line:#e3eaf2; }
-    * { box-sizing:border-box; }
-    body { margin:0; padding:28px 16px; background:#f4f7fb; color:#1b2638; font-family:Arial,sans-serif; line-height:1.55; }
-    .card { width:min(620px,100%); margin:0 auto; padding:26px; background:#fff; border:1px solid var(--line); border-radius:20px; box-shadow:0 16px 44px rgba(16,29,53,.08); }
-    .eyebrow { margin:0 0 6px; color:var(--blue); font-size:11px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
-    h1 { margin:0; color:var(--navy); font-size:26px; line-height:1.2; }
-    .intro { margin:9px 0 22px; color:var(--muted); font-size:13px; }
-    .field { display:flex; flex-direction:column; gap:7px; margin-top:16px; }
-    label { color:var(--navy); font-size:13px; font-weight:700; }
-    input[type=text] { width:100%; min-height:46px; padding:11px 13px; border:1px solid #d9e2ee; border-radius:10px; background:#fbfcfe; font-size:14px; }
-    input:focus { outline:2px solid #bfd3ff; border-color:#7da5f8; }
-    .filebox { padding:17px; border:1.5px dashed #b8c8df; border-radius:13px; background:#f8faff; }
-    .filebox small { display:block; margin-top:5px; color:var(--muted); font-size:11px; }
-    input[type=file] { display:block; max-width:100%; margin-top:12px; font-size:12px; }
-    .file-name { min-height:18px; margin:8px 0 0; color:#08744e; font-size:12px; font-weight:700; overflow-wrap:anywhere; }
-    .button { display:block; width:100%; min-height:48px; margin-top:20px; border:0; border-radius:11px; background:var(--blue); color:#fff; font-size:14px; font-weight:800; cursor:pointer; }
-    .button:hover:not(:disabled) { background:#1d4ed8; }
-    .button:disabled { opacity:.6; cursor:wait; }
-    .status { display:none; margin-top:16px; padding:13px 14px; border-radius:10px; font-size:13px; }
-    .status.show { display:block; }
-    .status.info { color:#24508d; background:#eff5ff; border:1px solid #cfe0ff; }
-    .status.success { color:#176344; background:#effbf5; border:1px solid #bee8d3; }
-    .status.error { color:#9b2c2c; background:#fff4f4; border:1px solid #f3caca; }
-    .honeypot { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
-    .foot { margin-top:18px; color:#8995a6; text-align:center; font-size:11px; }
+    :root{color-scheme:light;--navy:#101d35;--blue:#2563eb;--muted:#64748b;--line:#e3eaf2}
+    *{box-sizing:border-box}
+    body{margin:0;padding:28px 16px;background:#f4f7fb;color:#1b2638;font-family:Arial,sans-serif;line-height:1.55}
+    .card{width:min(680px,100%);margin:0 auto;padding:26px;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 16px 44px rgba(16,29,53,.08)}
+    .eyebrow{margin:0 0 6px;color:var(--blue);font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+    h1{margin:0;color:var(--navy);font-size:26px;line-height:1.2}
+    .intro{margin:9px 0 20px;color:var(--muted);font-size:13px}
+    .field{display:flex;flex-direction:column;gap:7px;margin-top:16px}
+    label{color:var(--navy);font-size:13px;font-weight:700}
+    input[type=text]{width:100%;min-height:45px;padding:11px 13px;border:1px solid #d9e2ee;border-radius:10px;background:#fbfcfe;font-size:14px}
+    input:focus{outline:2px solid #bfd3ff;border-color:#7da5f8}
+    .filebox{padding:15px;border:1.5px dashed #b8c8df;border-radius:13px;background:#f8faff}
+    .filebox small{display:block;margin-top:4px;color:var(--muted);font-size:11px}
+    input[type=file]{display:block;max-width:100%;margin-top:11px;font-size:12px}
+    .file-name{min-height:18px;margin:8px 0 0;color:#08744e;font-size:12px;font-weight:700;overflow-wrap:anywhere}
+    .button{display:block;width:100%;min-height:48px;margin-top:20px;border:0;border-radius:11px;background:var(--blue);color:#fff;font-size:14px;font-weight:800;cursor:pointer}
+    .button:hover:not(:disabled){background:#1d4ed8}
+    .button:disabled{opacity:.6;cursor:wait}
+    .status{display:none;margin-top:16px;padding:13px 14px;border-radius:10px;font-size:13px}
+    .status.show{display:block}
+    .status.info{color:#24508d;background:#eff5ff;border:1px solid #cfe0ff}
+    .status.success{color:#176344;background:#effbf5;border:1px solid #bee8d3}
+    .status.error{color:#9b2c2c;background:#fff4f4;border:1px solid #f3caca}
+    .honeypot{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+    .foot{margin-top:18px;color:#8995a6;text-align:center;font-size:11px}
+    .success-mark{font-size:23px;margin-right:5px}
   </style>
 </head>
 <body>
   <main class="card">
-    <p class="eyebrow">Tugas Praktik Informatika</p>
-    <h1>Pengumpulan Tugas Mail Merge</h1>
-    <p class="intro">Masukkan nama dan kelas, kemudian unggah dokumen hasil Mail Merge. Format yang diterima PDF, DOC, atau DOCX dengan ukuran maksimal 10 MB.</p>
+    <p class="eyebrow">LPMN · Praktikum Mail Merge</p>
+    <h1>Form Pengumpulan Tugas</h1>
+    <p class="intro">Isi identitas dan unggah dua dokumen Word. Keduanya wajib diunggah agar tugas dapat dicatat.</p>
 
     <form id="submissionForm">
       <div class="field">
@@ -47,82 +48,101 @@
         <label for="studentClass">Kelas</label>
         <input id="studentClass" name="studentClass" type="text" maxlength="30" placeholder="Contoh: 8A" required>
       </div>
+
       <div class="field">
-        <label for="taskFile">File hasil Mail Merge</label>
+        <label for="templateFile">1. Template_Surat.docx</label>
         <div class="filebox">
-          <strong>Pilih file tugas dari perangkat</strong>
-          <small>PDF, DOC, atau DOCX · Maksimal 10 MB</small>
-          <input id="taskFile" name="taskFile" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
-          <p id="fileName" class="file-name">Belum ada file dipilih.</p>
+          <strong>Template surat sebelum Mail Merge</strong>
+          <small>Upload dokumen template yang berisi Merge Field.</small>
+          <input id="templateFile" name="templateFile" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
+          <p id="templateFileName" class="file-name">Belum ada file dipilih.</p>
         </div>
       </div>
+
+      <div class="field">
+        <label for="resultFile">2. Hasil_Mail_Merge.docx</label>
+        <div class="filebox">
+          <strong>Hasil penggabungan 15 surat</strong>
+          <small>Upload dokumen hasil Finish &amp; Merge yang berisi 15 surat.</small>
+          <input id="resultFile" name="resultFile" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
+          <p id="resultFileName" class="file-name">Belum ada file dipilih.</p>
+        </div>
+      </div>
+
       <div class="honeypot" aria-hidden="true">
         <label for="website">Website</label>
         <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
       </div>
-      <button class="button" id="submitButton" type="submit">Kirim Tugas</button>
+
+      <button class="button" id="submitButton" type="submit">Kirim Kedua File</button>
       <div class="status" id="status" role="status" aria-live="polite"></div>
     </form>
-    <p class="foot">Pastikan file yang diunggah adalah hasil akhir dan seluruh surat sudah diperiksa.</p>
+
+    <p class="foot">Format wajib DOCX · Maksimal 10 MB untuk setiap file.</p>
   </main>
 
   <script>
-    const form = document.getElementById("submissionForm");
-    const fileInput = document.getElementById("taskFile");
-    const fileName = document.getElementById("fileName");
-    const button = document.getElementById("submitButton");
-    const statusBox = document.getElementById("status");
-    const maxBytes = 10 * 1024 * 1024;
-    const allowed = ["pdf", "doc", "docx"];
+    const form=document.getElementById("submissionForm");
+    const templateInput=document.getElementById("templateFile");
+    const resultInput=document.getElementById("resultFile");
+    const templateName=document.getElementById("templateFileName");
+    const resultName=document.getElementById("resultFileName");
+    const button=document.getElementById("submitButton");
+    const statusBox=document.getElementById("status");
+    const maxBytes=10*1024*1024;
 
-    function showStatus(message, type) {
-      statusBox.textContent = message;
-      statusBox.className = "status show " + type;
+    function showStatus(message,type){
+      statusBox.textContent=message;
+      statusBox.className="status show "+type;
     }
-
-    fileInput.addEventListener("change", () => {
-      const file = fileInput.files && fileInput.files[0];
-      fileName.textContent = file
-        ? "File dipilih: " + file.name + " (" + (file.size / 1024 / 1024).toFixed(2) + " MB)"
+    function displayFile(input,target){
+      const file=input.files&&input.files[0];
+      target.textContent=file
+        ? "File dipilih: "+file.name+" ("+(file.size/1024/1024).toFixed(2)+" MB)"
         : "Belum ada file dipilih.";
-    });
+    }
+    templateInput.addEventListener("change",()=>displayFile(templateInput,templateName));
+    resultInput.addEventListener("change",()=>displayFile(resultInput,resultName));
 
-    // Prevent the browser's normal form navigation.
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit",(event)=>{
       event.preventDefault();
-      if (!form.reportValidity()) return;
+      if(!form.reportValidity())return;
 
-      const file = fileInput.files && fileInput.files[0];
-      const extension = file ? file.name.toLowerCase().split(".").pop() : "";
-      if (!file) return showStatus("Pilih file tugas terlebih dahulu.", "error");
-      if (!allowed.includes(extension)) {
-        return showStatus("Format file harus PDF, DOC, atau DOCX.", "error");
+      const template=templateInput.files&&templateInput.files[0];
+      const result=resultInput.files&&resultInput.files[0];
+      if(!template||!result)return showStatus("Pilih kedua file DOCX terlebih dahulu.","error");
+
+      for(const file of [template,result]){
+        if(!file.name.toLowerCase().endsWith(".docx")){
+          return showStatus("Kedua file harus berformat .docx.","error");
+        }
+        if(file.size<=0||file.size>maxBytes){
+          return showStatus("Ukuran setiap file harus lebih dari 0 dan maksimal 10 MB.","error");
+        }
       }
-      if (file.size <= 0 || file.size > maxBytes) {
-        return showStatus("Ukuran file harus lebih dari 0 dan maksimal 10 MB.", "error");
-      }
 
-      button.disabled = true;
-      button.textContent = "Mengunggah...";
-      showStatus("File sedang diunggah dan dicatat. Jangan tutup halaman ini.", "info");
+      button.disabled=true;
+      button.textContent="Mengunggah 2 file...";
+      showStatus("Kedua file sedang diunggah dan dicatat. Jangan tutup halaman ini.","info");
 
-      // The form element must be the only argument to the server function.
       google.script.run
-        .withSuccessHandler((result) => {
-          button.disabled = false;
-          button.textContent = "Kirim Tugas";
-          if (result && result.ok) {
-            showStatus(result.message || "Tugas berhasil dikumpulkan.", "success");
+        .withSuccessHandler((response)=>{
+          button.disabled=false;
+          button.textContent="Kirim Kedua File";
+          if(response&&response.ok){
+            showStatus("✓ "+(response.message||"Kedua file berhasil dikumpulkan.")+
+              " File template dan hasil Mail Merge sudah tersimpan.","success");
             form.reset();
-            fileName.textContent = "Belum ada file dipilih.";
-          } else {
-            showStatus("Server tidak memberikan konfirmasi yang valid. Hubungi guru.", "error");
+            templateName.textContent="Belum ada file dipilih.";
+            resultName.textContent="Belum ada file dipilih.";
+          }else{
+            showStatus("Server tidak memberikan konfirmasi yang valid. Hubungi guru.","error");
           }
         })
-        .withFailureHandler((error) => {
-          button.disabled = false;
-          button.textContent = "Kirim Tugas";
-          showStatus(error && error.message ? error.message : "Gagal mengirim tugas. Silakan coba lagi.", "error");
+        .withFailureHandler((error)=>{
+          button.disabled=false;
+          button.textContent="Kirim Kedua File";
+          showStatus(error&&error.message?error.message:"Gagal mengirim tugas. Silakan coba lagi.","error");
         })
         .submitAssignment(form);
     });
