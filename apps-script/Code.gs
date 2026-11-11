@@ -1,73 +1,35 @@
 /**
- * MAIL MERGE — penerimaan tugas siswa.
- * Jalankan setup() satu kali sebelum deploy sebagai Web App.
+ * MAIL MERGE LPMN — pengumpulan dua file DOCX siswa.
+ * Menggunakan folder Drive dan Spreadsheet yang sudah disiapkan sebelumnya.
  */
 
 const APP_CONFIG = {
-  SPREADSHEET_NAME: "Rekap Pengumpulan Tugas Surat Resmi",
   FOLDER_NAME: "Pengumpulan Tugas Surat Resmi",
-  SHEET_NAME: "Pengumpulan",
+  NEW_SHEET_NAME: "Pengumpulan_Surat_Resmi",
   MAX_FILE_SIZE: 10 * 1024 * 1024,
-  ALLOWED_EXTENSIONS: ["pdf", "doc", "docx"]
+  DOCX_MIME: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 };
 
-function setup() {
-  const properties = PropertiesService.getScriptProperties();
-  let spreadsheetId = properties.getProperty("SPREADSHEET_ID");
-  let folderId = properties.getProperty("FOLDER_ID");
-
-  if (!spreadsheetId) {
-    const spreadsheet = SpreadsheetApp.create(APP_CONFIG.SPREADSHEET_NAME);
-    const sheet = spreadsheet.getSheets()[0];
-    sheet.setName(APP_CONFIG.SHEET_NAME);
-    sheet.appendRow([
-      "Waktu Pengumpulan", "Nama Siswa", "Kelas", "Nama File",
-      "Ukuran File (Byte)", "Tipe File", "Link File", "ID Pengumpulan"
-    ]);
-    sheet.setFrozenRows(1);
-    sheet.getRange(1, 1, 1, 8)
-      .setFontWeight("bold")
-      .setBackground("#172947")
-      .setFontColor("#ffffff");
-    sheet.autoResizeColumns(1, 8);
-    spreadsheetId = spreadsheet.getId();
-    properties.setProperty("SPREADSHEET_ID", spreadsheetId);
-  }
-
-  if (!folderId) {
-    const folder = DriveApp.createFolder(APP_CONFIG.FOLDER_NAME);
-    folderId = folder.getId();
-    properties.setProperty("FOLDER_ID", folderId);
-  }
-
-  Logger.log("SETUP SELESAI");
-  Logger.log("Spreadsheet: " + SpreadsheetApp.openById(spreadsheetId).getUrl());
-  Logger.log("Folder Drive: " + DriveApp.getFolderById(folderId).getUrl());
-}
-
-/**
- * Halaman upload berada dalam domain Apps Script sehingga respons server
- * dapat ditangani langsung oleh google.script.run.
- */
 function doGet(e) {
   const view = e && e.parameter ? e.parameter.view : "";
   if (view === "form") {
     return HtmlService.createHtmlOutputFromFile("SubmissionForm")
-      .setTitle("Pengumpulan Tugas Mail Merge");
+      .setTitle("Pengumpulan Tugas Mail Merge LPMN");
   }
 
   return HtmlService.createHtmlOutput(
-    "<h2>Form Pengumpulan Tugas Mail Merge</h2>" +
+    "<h2>Pengumpulan Tugas Mail Merge LPMN</h2>" +
     "<p>Buka halaman tugas, lalu klik tombol Buka Form Pengumpulan.</p>"
   );
 }
 
 /**
- * Form element harus menjadi satu-satunya argumen google.script.run.
- * Apps Script mengubah input file menjadi Blob pada formObject.taskFile.
+ * Form element dikirim sebagai satu-satunya argumen google.script.run.
+ * Input file menjadi Blob di server Apps Script.
  */
 function submitAssignment(formObject) {
-  let savedFile = null;
+  let templateDriveFile = null;
+  let resultDriveFile = null;
   let lock = null;
 
   try {
@@ -78,87 +40,144 @@ function submitAssignment(formObject) {
 
     const studentName = String(formObject.studentName || "").trim();
     const studentClass = String(formObject.studentClass || "").trim();
-    const fileBlob = formObject.taskFile;
-
     if (!studentName || !studentClass) {
       throw new Error("Nama dan kelas wajib diisi.");
     }
     if (studentName.length > 100 || studentClass.length > 30) {
       throw new Error("Nama atau kelas terlalu panjang.");
     }
-    if (!fileBlob || typeof fileBlob.getBytes !== "function") {
-      throw new Error("File tugas belum dipilih.");
-    }
 
-    const originalName = String(fileBlob.getName() || "").trim();
-    const match = originalName.toLowerCase().match(/\.([a-z0-9]+)$/);
-    const extension = match ? match[1] : "";
-    if (APP_CONFIG.ALLOWED_EXTENSIONS.indexOf(extension) === -1) {
-      throw new Error("Format file harus PDF, DOC, atau DOCX.");
-    }
-
-    const bytes = fileBlob.getBytes();
-    if (!bytes || bytes.length === 0) throw new Error("File yang dipilih kosong.");
-    if (bytes.length > APP_CONFIG.MAX_FILE_SIZE) {
-      throw new Error("Ukuran file melebihi batas 10 MB.");
-    }
-
-    const mimeTypes = {
-      pdf: "application/pdf",
-      doc: "application/msword",
-      docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    };
+    const templateBlob = validateDocx_(formObject.templateFile, "Template_Surat.docx");
+    const resultBlob = validateDocx_(formObject.resultFile, "Hasil_Mail_Merge.docx");
 
     const properties = PropertiesService.getScriptProperties();
     const folderId = properties.getProperty("FOLDER_ID");
     const spreadsheetId = properties.getProperty("SPREADSHEET_ID");
     if (!folderId || !spreadsheetId) {
-      throw new Error("Server belum disiapkan. Guru perlu menjalankan setup() di Apps Script.");
+      throw new Error("Konfigurasi Drive/Spreadsheet tidak ditemukan. Hubungi guru.");
     }
 
-    const safeName = originalName
-      .replace(/[\\/:*?"<>|#%{}~&]/g, "_")
-      .replace(/\s+/g, "_")
-      .slice(-120);
-    const timeLabel = Utilities.formatDate(
-      new Date(), Session.getScriptTimeZone(), "yyyyMMdd_HHmmss"
-    );
-    const savedName = timeLabel + "_" + safeName;
-    const blob = Utilities.newBlob(bytes, mimeTypes[extension], savedName);
+    const folder = DriveApp.getFolderById(folderId);
+    const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
+    const sheet = getOrCreateSubmissionSheet_(spreadsheet);
 
     lock = LockService.getScriptLock();
     lock.waitLock(30000);
 
-    savedFile = DriveApp.getFolderById(folderId).createFile(blob);
-    savedFile.setDescription(
-      "Tugas Mail Merge Surat Resmi dari " + studentName + " (" + studentClass + ")"
+    const submissionId = Utilities.getUuid();
+    const timestamp = Utilities.formatDate(
+      new Date(), Session.getScriptTimeZone(), "yyyyMMdd_HHmmss"
+    );
+    const studentSlug = safeName_(studentName);
+    const shortId = submissionId.substring(0, 8);
+
+    const templateName = "Template_Surat_" + studentSlug + "_" + timestamp + "_" + shortId + ".docx";
+    const resultName = "Hasil_Mail_Merge_" + studentSlug + "_" + timestamp + "_" + shortId + ".docx";
+
+    templateDriveFile = folder.createFile(
+      Utilities.newBlob(templateBlob.bytes, APP_CONFIG.DOCX_MIME, templateName)
+    );
+    resultDriveFile = folder.createFile(
+      Utilities.newBlob(resultBlob.bytes, APP_CONFIG.DOCX_MIME, resultName)
     );
 
-    const spreadsheet = SpreadsheetApp.openById(spreadsheetId);
-    const sheet = spreadsheet.getSheetByName(APP_CONFIG.SHEET_NAME);
-    if (!sheet) throw new Error("Sheet pengumpulan tidak ditemukan.");
+    templateDriveFile.setDescription(
+      "Template surat resmi LPMN dari " + studentName + " (" + studentClass + ")"
+    );
+    resultDriveFile.setDescription(
+      "Hasil Mail Merge LPMN dari " + studentName + " (" + studentClass + ")"
+    );
 
-    const submissionId = Utilities.getUuid();
     sheet.appendRow([
-      new Date(), studentName, studentClass, savedName,
-      bytes.length, mimeTypes[extension], savedFile.getUrl(), submissionId
+      new Date(),
+      studentName,
+      studentClass,
+      templateName,
+      templateDriveFile.getUrl(),
+      resultName,
+      resultDriveFile.getUrl(),
+      templateBlob.bytes.length,
+      resultBlob.bytes.length,
+      submissionId
     ]);
+    SpreadsheetApp.flush();
 
     return {
       ok: true,
-      message: "Tugas berhasil dikumpulkan. Terima kasih!",
-      fileName: savedName,
+      message: "Kedua file berhasil dikumpulkan. Terima kasih!",
+      templateFile: templateName,
+      resultFile: resultName,
       submissionId: submissionId
     };
   } catch (error) {
-    if (savedFile) {
-      try { savedFile.setTrashed(true); } catch (ignored) {}
+    if (templateDriveFile) {
+      try { templateDriveFile.setTrashed(true); } catch (ignored) {}
+    }
+    if (resultDriveFile) {
+      try { resultDriveFile.setTrashed(true); } catch (ignored) {}
     }
     throw new Error(
-      error && error.message ? error.message :
-      "Terjadi kesalahan saat menyimpan tugas. Silakan coba lagi."
+      error && error.message
+        ? error.message
+        : "Terjadi kesalahan saat menyimpan tugas. Silakan coba lagi."
     );
   } finally {
     if (lock && lock.hasLock()) lock.releaseLock();
   }
+}
+
+function validateDocx_(blob, label) {
+  if (!blob || typeof blob.getBytes !== "function") {
+    throw new Error("File " + label + " wajib diunggah.");
+  }
+
+  const originalName = String(blob.getName() || "").trim();
+  if (!/\.docx$/i.test(originalName)) {
+    throw new Error("File " + label + " harus berformat .docx.");
+  }
+
+  const bytes = blob.getBytes();
+  if (!bytes || bytes.length === 0) {
+    throw new Error("File " + label + " kosong.");
+  }
+  if (bytes.length > APP_CONFIG.MAX_FILE_SIZE) {
+    throw new Error("File " + label + " melebihi batas 10 MB.");
+  }
+
+  return { bytes: bytes, originalName: originalName };
+}
+
+function getOrCreateSubmissionSheet_(spreadsheet) {
+  let sheet = spreadsheet.getSheetByName(APP_CONFIG.NEW_SHEET_NAME);
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(APP_CONFIG.NEW_SHEET_NAME);
+    sheet.appendRow([
+      "Waktu Pengumpulan",
+      "Nama Siswa",
+      "Kelas",
+      "File Template",
+      "Link Template",
+      "File Hasil Mail Merge",
+      "Link Hasil Mail Merge",
+      "Ukuran Template (Byte)",
+      "Ukuran Hasil (Byte)",
+      "ID Pengumpulan"
+    ]);
+    sheet.setFrozenRows(1);
+    sheet.getRange(1, 1, 1, 10)
+      .setFontWeight("bold")
+      .setBackground("#172947")
+      .setFontColor("#ffffff")
+      .setWrap(true);
+    sheet.autoResizeColumns(1, 10);
+  }
+  return sheet;
+}
+
+function safeName_(value) {
+  return String(value || "Siswa")
+    .replace(/[\\/:*?"<>|#%{}~&]/g, "_")
+    .replace(/\s+/g, "_")
+    .replace(/^_+|_+$/g, "")
+    .substring(0, 50) || "Siswa";
 }
