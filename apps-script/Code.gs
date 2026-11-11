@@ -105,8 +105,8 @@ function validateDocx_(blob, label) {
     throw new Error("File " + label + " wajib diunggah.");
   }
   const originalName = String(blob.getName() || "").trim();
-  if (!/\.docx$/i.test(originalName)) {
-    throw new Error("File " + label + " harus berformat .docx.");
+  if (originalName.toLowerCase() !== label.toLowerCase()) {
+    throw new Error("Nama file harus tepat: " + label);
   }
   const bytes = blob.getBytes();
   if (!bytes || bytes.length === 0) throw new Error("File " + label + " kosong.");
