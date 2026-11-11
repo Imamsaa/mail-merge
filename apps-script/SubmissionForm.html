@@ -37,7 +37,7 @@
   <main class="card">
     <p class="eyebrow">LPMN · Praktikum Mail Merge</p>
     <h1>Form Pengumpulan Tugas</h1>
-    <p class="intro">Isi identitas dan unggah dua dokumen Word. Keduanya wajib diunggah agar tugas dapat dicatat.</p>
+    <p class="intro">Isi identitas dan unggah dua dokumen Word dengan nama file yang ditentukan. Keduanya wajib diunggah.</p>
 
     <form id="submissionForm">
       <div class="field">
@@ -53,7 +53,7 @@
         <label for="templateFile">1. Template_Surat.docx</label>
         <div class="filebox">
           <strong>Template surat sebelum Mail Merge</strong>
-          <small>Upload dokumen template yang berisi Merge Field.</small>
+          <small>Nama file wajib Template_Surat.docx. Berisi desain surat dan Merge Field.</small>
           <input id="templateFile" name="templateFile" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
           <p id="templateFileName" class="file-name">Belum ada file dipilih.</p>
         </div>
@@ -63,7 +63,7 @@
         <label for="resultFile">2. Hasil_Mail_Merge.docx</label>
         <div class="filebox">
           <strong>Hasil penggabungan 15 surat</strong>
-          <small>Upload dokumen hasil Finish &amp; Merge yang berisi 15 surat.</small>
+          <small>Nama file wajib Hasil_Mail_Merge.docx. Berisi hasil penggabungan 15 surat.</small>
           <input id="resultFile" name="resultFile" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
           <p id="resultFileName" class="file-name">Belum ada file dipilih.</p>
         </div>
@@ -112,10 +112,13 @@
       const result=resultInput.files&&resultInput.files[0];
       if(!template||!result)return showStatus("Pilih kedua file DOCX terlebih dahulu.","error");
 
+      if(template.name.toLowerCase()!=="template_surat.docx"){
+        return showStatus("Nama file template harus Template_Surat.docx.","error");
+      }
+      if(result.name.toLowerCase()!=="hasil_mail_merge.docx"){
+        return showStatus("Nama file hasil harus Hasil_Mail_Merge.docx.","error");
+      }
       for(const file of [template,result]){
-        if(!file.name.toLowerCase().endsWith(".docx")){
-          return showStatus("Kedua file harus berformat .docx.","error");
-        }
         if(file.size<=0||file.size>maxBytes){
           return showStatus("Ukuran setiap file harus lebih dari 0 dan maksimal 10 MB.","error");
         }
